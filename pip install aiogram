@@ -1,0 +1,97 @@
+import os
+import asyncio
+from aiogram import Bot, Dispatcher, F
+from aiogram.filters import CommandStart
+from aiogram.types import Message
+from aiogram.utils.keyboard import ReplyKeyboardBuilder
+
+TOKEN = os.getenv("8606124878:AAHQnhNNQQ8QBDEeAgKfXUA04iAWxWKgbJ4")
+
+bot = Bot(token=TOKEN)
+dp = Dispatcher()
+
+def main_menu():
+    kb = ReplyKeyboardBuilder()
+
+    buttons = [
+        "🛍 Product Store",
+        "👤 My Profile",
+        "💰 Add Balance",
+        "🗝 All History",
+        "👥 Referral",
+        "🎬 Tutorials",
+        "🆘 Support",
+        "📥 Download Files",
+        "🤝 Reseller Panel"
+    ]
+
+    for button in buttons:
+        kb.button(text=button)
+
+    kb.adjust(1, 2, 2, 2, 2)
+    return kb.as_markup(resize_keyboard=True)
+
+@dp.message(CommandStart())
+async def start(message: Message):
+    await message.answer(
+        "✨ WELCOME TO THE STORE\n\n"
+        "🛍 Product Store: Purchase products\n"
+        "👤 My Profile: Account information\n"
+        "💰 Add Balance: Deposit request\n"
+        "🗝 All History: Purchase history\n"
+        "👥 Referral: Invite friends\n"
+        "🎬 Tutorials: Tutorials\n"
+        "🆘 Support: Contact support\n"
+        "📥 Download Files: Download section\n"
+        "🤝 Reseller Panel: Reseller section",
+        reply_markup=main_menu()
+    )
+
+@dp.message(F.text == "🛍 Product Store")
+async def store(message: Message):
+    await message.answer("🛍 Welcome to Product Store!")
+
+@dp.message(F.text == "👤 My Profile")
+async def profile(message: Message):
+    await message.answer(
+        f"👤 Your Telegram ID: {message.from_user.id}"
+    )
+
+@dp.message(F.text == "💰 Add Balance")
+async def balance(message: Message):
+    await message.answer(
+        "💰 Balance deposit ke liye admin se contact karein."
+    )
+
+@dp.message(F.text == "🗝 All History")
+async def history(message: Message):
+    await message.answer("🗝 Your purchase history.")
+
+@dp.message(F.text == "👥 Referral")
+async def referral(message: Message):
+    me = await bot.get_me()
+    await message.answer(
+        f"👥 Invite link:\nhttps://t.me/{me.username}"
+    )
+
+@dp.message(F.text == "🎬 Tutorials")
+async def tutorials(message: Message):
+    await message.answer("🎬 Welcome to Tutorials!")
+
+@dp.message(F.text == "🆘 Support")
+async def support(message: Message):
+    await message.answer("🆘 Contact our support team.")
+
+@dp.message(F.text == "📥 Download Files")
+async def downloads(message: Message):
+    await message.answer("📥 Download section.")
+
+@dp.message(F.text == "🤝 Reseller Panel")
+async def reseller(message: Message):
+    await message.answer("🤝 Reseller Panel")
+
+async def main():
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())
